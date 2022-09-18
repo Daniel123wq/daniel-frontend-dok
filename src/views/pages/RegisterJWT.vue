@@ -76,7 +76,7 @@ Author URL: http://www.themeforest.net/user/pixinvent
                   <span class="text-danger text-sm">{{ errors.first('confirm_password') }}</span>
 
                   <vs-checkbox v-model="isTermsConditionAccepted" class="mt-6">Eu aceito os termos & condições.</vs-checkbox>
-                  <vs-button  type="border" to="/pages/login" class="mt-6">Login</vs-button>
+                  <vs-button  type="border" to="/login" class="mt-6">Login</vs-button>
                   <vs-button class="float-right mt-6" @click="registerUserJWt" :disabled="!validateForm">Registrar</vs-button>
               </div>
             </div>
@@ -154,9 +154,17 @@ export default {
               color: 'success'
             })
           } else {
+            let error = ''
+            for (const key in e.data.error) {
+              if (Object.hasOwnProperty.call(e.data.error, key)) {
+                const element = e.data.error[key];
+                error += '\n' + element.join()
+              }
+            }
+            
             this.$vs.notify({
               title: 'Falha ao efetuar o registro',
-              text: e.data.message,
+              text: error,
               iconPack: 'feather',
               icon: 'icon-alert-circle',
               color: 'danger'

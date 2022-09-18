@@ -65,7 +65,8 @@ export default {
     let vh = window.innerHeight * 0.01;
     // Then we set the value in the --vh custom property to the root of the document
     let r = this.$router 
-    let v = this.$vs 
+    let v = this.$vs
+    window.notify = v.notify 
     document.documentElement.style.setProperty('--vh', `${vh}px`);
     $(document).ajaxComplete((event, jqXhr) => {
       if (jqXhr.status == 401) {

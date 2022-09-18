@@ -30,9 +30,15 @@ export default [
     icon: "UserIcon",
   },
   {
-    url: "/veiculos",
-    name: "Veiculos",
-    slug: "veiculo",
-    icon: "TruckIcon",
+    url: "/categorias",
+    name: "Categorias",
+    slug: "categoria",
+    icon: "ListIcon",
   },
+  {
+    url: "/produtos",
+    name: "Produtos",
+    slug: "produto",
+    icon: "PackageIcon",
+  }
 ]

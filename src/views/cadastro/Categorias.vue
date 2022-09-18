@@ -10,7 +10,7 @@ export default {
   components: {},
   data: () => {
     return {
-      className: 'veiculo',
+      className: 'categoria',
       config: {},
     };
   },
@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     getConfig: () => {
-      let className = process.env.VUE_APP_BASE_API + 'veiculo'
+      let className = process.env.VUE_APP_BASE_API + 'categoria'
       let config = {
         grid: {
           name: 'grid1',
@@ -36,51 +36,38 @@ export default {
             toolbarSave: false,
             toolbarEdit: true,
           },
-          withs: ['users'],
+          withs: [],
           columns: [
               { field: 'id', text: 'ID', size: '5%' },
-              { field: 'placa', text: 'Placa', size: '50%' },
-              { field: 'modelo', text: 'Modelo', size: '40%' },
-              { field: 'tipo', text: 'Tipo', size: '40%' },
-              { field: 'cor', text: 'Cor', size: '40%' },
-              { field: 'users.name', text: 'Usuário', size: '40%' },
+              { field: 'nome', text: 'nome', size: '50%' }
           ],
           limit: 6,
           multiSearch: true,
           searches: [
             { field: 'id', label: 'ID ', type: 'int' },
-            { field: 'placa', label: 'Código da Placa', type: 'text' },
-            { field: 'modelo', label: 'Modelo', type: 'text' },
-            { field: 'tipo', label: 'Tipo', type: 'text' },
-            { field: 'cor', label: 'Cor', type: 'color' },
-            { field: 'users.name', label: 'Usuario', type: 'text' },
-          ] ,
+            { field: 'nome', label: 'Nome da Categoria', type: 'text' }
+          ],
           onLoad: (event) => {
             let data = event.xhr.responseJSON;
             event.xhr.responseText = { records: data};
           },
           onAdd: function (event) {
             this.openPopup()
-            console.log(['abre form de criação', event])
             // window.location.href = className + '/create';
           },
           onEdit: function (event) {
-            console.log(['abre form de edição', event])
             let row = this.get(this.getSelection())[0]
             this.openPopup(row)
           },
           onDelete: function (event) {
-            console.log(['apagando', event])
           },
           openPopup: (event = {}) => {
-            console.log(event)
-            let url = process.env.VUE_APP_BASE_API + 'veiculo'
+            let url = process.env.VUE_APP_BASE_API + 'categoria'
             let method = 'POST'
             if (event.id) {
               url += '/' + event.id
               method = 'PUT'
             }
-            console.log(event)
             if (w2ui.foo) {
               delete w2ui.foo
               delete w2ui.foo_toolbar
@@ -93,20 +80,7 @@ export default {
               autosize: true,
               style: 'background-color: transparent;z-index:99999',
               fields: [
-                { field: 'placa', label: 'Código da Placa', type: 'text', required: true, attr: 'style="with:100%;"', html: { label: 'Código da Placa' } },
-                { field: 'modelo', label: 'Modelo', type: 'text', attr: 'style="with:100%;"', html: { label: 'Modelo' } },
-                { field: 'tipo', label: 'Tipo', type: 'list', attr: 'style="with:100%;"', html: { label: 'Tipo' }, options: {
-                  items: ['carro', 'moto']
-                } },
-                { field: 'cor', label: 'Cor', type: 'text', attr: 'style="with:100%;"', html: { label: 'Cor' } },
-                // { field: 'user_id', label: 'Usuario', type: 'list', html: { label: 'Usuário' }, options: {
-                //     openOnFocus: true,
-                //     url: process.env.VUE_APP_BASE_API + 'usuario',
-                //     onRequest(event) {
-                //       event.postData.search = [{ field: 'name', type: 'text', operator: 'contains', value: event.postData.search }]
-                //       event.postData.isSelect = ['id', 'name as text']
-                //     }
-                // } },
+                { field: 'nome', label: 'Nome', type: 'text', required: true, attr: 'style="with:100%;"', html: { label: 'Nome da Categoria' } },
               ],
               record: event,
               onRequest: function(event) {
@@ -146,17 +120,24 @@ export default {
                       }
                       this.showErrors()
                     }
-                    w2alert(e.message)
+                    // w2alert(e.message)
+                    window.notify({
+                      title: 'Falha ao salvar',
+                      text: e.message,
+                      iconPack: 'feather',
+                      icon: 'icon-alert-circle',
+                      color: 'danger'
+                    })
                   } else {
-                    console.log(this)
                     w2popup.close()
-                    w2alert(e.message)
+                    window.notify({
+                      title: 'Salvo com sucesso',
+                      text: e.message,
+                      iconPack: 'feather',
+                      icon: 'icon-alert-circle',
+                      color: 'success'
+                    })
                     $(".w2ui-icon-reload").click()
-                    // w2ui.grid.refresh();
-                    // let id = w2ui.grid.getSelection()[0]
-                    // let registro = w2ui.grid.get(id)
-                    // let newVal = {...registro, ...this.record}
-                    // w2ui.grid.set(id, newVal, false)
                     setTimeout(() => {
                       w2popup.close()
                     }, 5000);
@@ -167,7 +148,7 @@ export default {
             })
             // }
             w2popup.open({
-              title   : 'Atualizar Veiculo',
+              title   : 'Atualizar Categoria',
               body    : '<div id="form" style="width: 100%; height: 100%;"></div>',
               style   : 'padding: 15px 0px 0px 0px',
               width   : 400,
@@ -182,14 +163,12 @@ export default {
               },
               onOpen: function (event) {
                 event.onComplete = function () {
-                  // specifying an onOpen handler instead is equivalent to specifying an onBeforeOpen handler, which would make this code execute too early and hence not deliver.
                   $('#w2ui-popup #form').w2render('foo');
                 }
               }
             })
           },
           onValidate(event) {
-            console.log(event)
           },
         },
       };

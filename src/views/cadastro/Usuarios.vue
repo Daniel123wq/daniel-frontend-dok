@@ -101,14 +101,28 @@ export default {
                       }
                       this.showErrors()
                     }
+                    window.notify({
+                      title: 'Falha ao salvar',
+                      text: e.message,
+                      iconPack: 'feather',
+                      icon: 'icon-alert-circle',
+                      color: 'danger'
+                    })
                   } else {
                     w2popup.close()
-                    w2alert(e.message)
-                    w2ui.grid.refresh();
-                    let id = w2ui.grid.getSelection()[0]
-                    let registro = w2ui.grid.get(id)
-                    let newVal = {...registro, ...this.record}
-                    w2ui.grid.set(id, newVal, false)
+                    window.notify({
+                      title: 'Salvo com Sucesso',
+                      text: e.message,
+                      iconPack: 'feather',
+                      icon: 'icon-alert-circle',
+                      color: 'success'
+                    })
+                    $(".w2ui-icon-reload").click()
+                    // w2ui.grid.refresh();
+                    // let id = w2ui.grid.getSelection()[0]
+                    // let registro = w2ui.grid.get(id)
+                    // let newVal = {...registro, ...this.record}
+                    // w2ui.grid.set(id, newVal, false)
                     setTimeout(() => {
                       w2popup.close()
                     }, 5000);

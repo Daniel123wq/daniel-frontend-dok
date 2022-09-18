@@ -43,9 +43,14 @@ const router = new Router({
                 component: () => import('./views/cadastro/Usuarios.vue')
               },
               {
-                path: '/veiculos',
-                name: 'Veiculos',
-                component: () => import('./views/cadastro/Veiculos.vue')
+                path: '/categorias',
+                name: 'Categorias',
+                component: () => import('./views/cadastro/Categorias.vue')
+              },
+              {
+                path: '/produtos',
+                name: 'Produto',
+                component: () => import('./views/cadastro/Produto.vue')
               },
             ],
             beforeEnter: (to, from, next) => {
